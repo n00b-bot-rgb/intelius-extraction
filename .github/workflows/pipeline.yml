@@ -2,8 +2,10 @@ name: Pipeline
 
 on:
   push:
-    branches: ["**"]
   pull_request:
+
+permissions:
+  contents: read
 
 jobs:
   validate:
@@ -29,3 +31,18 @@ jobs:
 
       - name: Validate package compiles
         run: python -m compileall intelius
+
+      - name: Run tests when collected
+        run: |
+          set +e
+          pytest -q --collect-only
+          status=$?
+          set -e
+
+          if [ "$status" -eq 0 ]; then
+            pytest -q
+          elif [ "$status" -eq 5 ]; then
+            echo "No tests collected; skipping pytest run."
+          else
+            exit "$status"
+          fi

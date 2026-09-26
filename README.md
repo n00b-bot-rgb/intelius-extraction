@@ -21,8 +21,9 @@ This project extracts contact information from Intelius.
 
 ## Pipeline and workflow integration
 
-A GitHub Actions workflow is included at `repository root/.github/workflows/pipeline.yml`.
+A GitHub Actions workflow is included at `.github/workflows/pipeline.yml` and runs on `push` and `pull_request` events.
 
-It validates integration by:
+It runs a baseline integration check by:
 - Installing system and Python dependencies
 - Compiling the `intelius` package (`python -m compileall intelius`)
+- Running `pytest` when tests are collected by pytest discovery
